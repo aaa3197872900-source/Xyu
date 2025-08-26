@@ -9,6 +9,7 @@
 </head>
 <body>
 	<div class="bg"></div>
+	<div class="orb" aria-hidden="true"></div>
 
 	<main class="card">
 		<header class="profile">
@@ -47,7 +48,28 @@
 
 	<script>
 		document.getElementById('year').textContent = new Date().getFullYear();
+
+		// Orb 跟随鼠标的平滑位移
+		const orb = document.querySelector('.orb');
+		let mx = 0, my = 0, tx = 0, ty = 0;
+
+		window.addEventListener('mousemove', (e) => {
+			const w = window.innerWidth, h = window.innerHeight;
+			// 鼠标位置映射到 -40px ~ 40px
+			mx = (e.clientX / w - 0.5) * 80;
+			my = (e.clientY / h - 0.5) * 80;
+		});
+
+		function tick() {
+			// 低通滤波（平滑）
+			tx += (mx - tx) * 0.08;
+			ty += (my - ty) * 0.08;
+			if (orb) {
+				orb.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+			}
+			requestAnimationFrame(tick);
+		}
+		tick();
 	</script>
 </body>
 </html>
-
